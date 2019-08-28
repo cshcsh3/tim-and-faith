@@ -1,0 +1,66 @@
+.main {
+  color: #f77754;
+}
+
+.sub {
+  color: #fce2ae;
+}
+
+.bride {
+  color: #ed1250;
+}
+
+.groom {
+  color: #49beb7;
+}
+
+.App {
+  background-color: #282c34;
+  min-height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  padding: 2rem;
+}
+
+.Welcome {
+  text-align: left;
+}
+
+.Quiz-input {
+  margin-bottom: 2rem;
+}
+
+.Quiz-input input[type=text] {
+  background-color: transparent;
+  color: white;
+  outline: none;
+  width: 150px;
+  border-width: 0 0 2px 0;
+  border-style: dashed;
+  padding: 0.3rem;
+  text-align: center;
+}
+
+.Quiz-radio {
+  margin: 1rem;
+}
+
+.Puzzle-message {
+  margin-top: 1rem;
+}
+
+.Puzzle-message input[type=text] {
+  background-color: transparent;
+  color: white;
+  outline: none;
+  width: 50px;
+  border-width: 0 0 2px 0;
+  padding: 0.3rem;
+  text-align: center;
+  margin-right: 5px;
+}
