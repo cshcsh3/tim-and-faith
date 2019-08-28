@@ -2,7 +2,7 @@ import React from 'react'
 import './App.css'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import { generatePuzzle, getAllowAlphabet } from './GeneratePuzzle'
+import { generatePuzzle } from './GeneratePuzzle'
 
 class App extends React.Component {
   constructor(props) {
@@ -166,7 +166,12 @@ class App extends React.Component {
         <small className="sub">If you are stuck, you can choose to do forfeits to unlock letters</small>
         <div className="Puzzle-message">
           {generatePuzzle(this.state.clues).map(item => (
-            (item === 0) ? <br/> : (parseInt(item)) ? <input type="text" maxLength="1" placeholder={item}/> : <input type="text" maxLength="1" placeholder={getAllowAlphabet(item)} defaultValue={item}/>
+            (item.tag === 0) ? <br/> 
+            : (!item.first) 
+              ? <input type="text" maxLength="1" placeholder={item.tag}/>
+              : (item.reveal) 
+                ? <input type="text" className="first" maxLength="1" placeholder={item.tag} defaultValue={item.name}/> 
+                : <input type="text" className="first" maxLength="1" placeholder={item.tag}/>  
           ))}
         </div>
       </div>

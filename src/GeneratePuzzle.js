@@ -29,10 +29,21 @@ const alphabetLibrary = {
     'z': 26
 }
 
-// allow will always only be the first alphabet
-export const getAllowAlphabet = (allow) => {
-    return alphabetLibrary[allow]
+class Letter {
+    constructor (tag, name, first, reveal) {
+        this.tag = tag
+        this.name = name
+        this.first = first
+        this.reveal = reveal
+    }
 }
+
+/* 
+A simple letter tracing puzzle.
+All letters in the message are tagged with a number.
+The tag for the first letter occurrences follows the alphabetical numbering (see alphabetLibrary).
+The tag for the subsequent letter occurrences follow the previous letter positioning.
+*/
 
 export const generatePuzzle = (clues) => {
     let allow = []
@@ -58,25 +69,32 @@ export const generatePuzzle = (clues) => {
     let puzzle = []
 
     let index = 1
-    for (const i of message) {
-        if (!hist[i]) {
+    for (const character of message) {
+        // spaces are not considered letters, tag position count will not count spaces
+        if (character === ' ') {
+            const letter = new Letter(alphabetLibrary[character], character, false, false) 
+            puzzle.push(letter)
+            continue
+        }
+
+        if (!hist[character]) {
             // char appearing for first time
-            // store letter number (obtained from alphabet library) as value
-            if (allow.includes(i)) {
-                puzzle.push(i)
+            if (allow.includes(character)) {
+                const letter = new Letter(alphabetLibrary[character], character, true, true)
+                puzzle.push(letter)
             } else {
-                puzzle.push(alphabetLibrary[i])
+                const letter = new Letter(alphabetLibrary[character], character, true, false)
+                puzzle.push(letter)
             }
         } else {
             // char appearing subsequent times
-            // get previous letter number (obtained from history stack) as value
-            puzzle.push(hist[i])
+            // tag should be index of previous character
+            const letter = new Letter(hist[character], character, false, false)
+            puzzle.push(letter)
         }
 
-        if (i !== ' ') {
-            // update history stack
-            hist[i] = index
-        }
+        // update history stack
+        hist[character] = index
         index++
     }
 

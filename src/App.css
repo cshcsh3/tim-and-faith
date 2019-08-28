@@ -64,3 +64,8 @@
   text-align: center;
   margin-right: 5px;
 }
+
+.Puzzle-message input[type=text].first  {
+  border-color: #f77754;
+}
+
