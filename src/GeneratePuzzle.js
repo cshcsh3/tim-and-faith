@@ -1,3 +1,5 @@
+import { message } from './Secret'
+
 // simple alphabet mapping
 const alphabetLibrary = {
     ' ': 0,
@@ -38,7 +40,7 @@ class Letter {
     }
 }
 
-/* 
+/*
 A simple letter tracing puzzle.
 All letters in the message are tagged with a number.
 The tag for the first letter occurrences follows the alphabetical numbering (see alphabetLibrary).
@@ -61,10 +63,9 @@ export const generatePuzzle = (clues) => {
 
     if (clues.includes('3')) {
         allow.push('f')
-        allow.push('h')   
+        allow.push('h')
     }
 
-    const message = "it was only eleven months ago that the king was born find the king and you shall find the key"
     let hist = {}
     let puzzle = []
 

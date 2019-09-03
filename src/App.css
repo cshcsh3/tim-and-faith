@@ -41,7 +41,6 @@
   outline: none;
   width: 150px;
   border-width: 0 0 2px 0;
-  border-style: dashed;
   padding: 0.3rem;
   text-align: center;
 }
@@ -69,3 +68,10 @@
   border-color: #f77754;
 }
 
+.Puzzle-message input[type=text].reveal  {
+  border-color: #49beb7;
+}
+
+.Puzzle-message input[type=text].default {
+  border-color: white;
+}
