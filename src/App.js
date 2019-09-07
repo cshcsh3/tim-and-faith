@@ -25,11 +25,6 @@ class App extends React.Component {
       clues: [],
       message: new Array(size)
     }
-
-    this.onFieldChange = this.onFieldChange.bind(this)
-    this.onRadioChange1 = this.onRadioChange1.bind(this)
-    this.onRadioChange2 = this.onRadioChange2.bind(this)
-    this.onInputChange = this.onInputChange.bind(this)
   }
 
   onReady = () => {
@@ -111,8 +106,7 @@ class App extends React.Component {
     })
   }
 
-  onInputChange(e, index) {
-    console.log(e.target.value)
+  onInputChange(index, e) {
     const current = [...this.state.message]
     current[index] = e.target.value
 
@@ -142,7 +136,7 @@ class App extends React.Component {
         <h1 className="main">Question 1</h1>
         <p>Where do we both work?</p>
         <div className="Quiz-input">
-          <input type="text" maxLength="10" value={this.state.field} onChange={this.onFieldChange} autoFocus/>
+          <input type="text" maxLength="10" value={this.state.field} onChange={(e) => this.onFieldChange(e)} autoFocus/>
         </div>
         <Button onClick={this.onSubmit}>Submit</Button>
       </div>
@@ -156,11 +150,11 @@ class App extends React.Component {
           {['radio'].map(type => (
           <div key={`quiz2-${type}`} className="mb-3">
             <Form.Check inline label="Tim" className="Quiz-radio" type={type} id={`quiz2-${type}-1`} name={`quiz2-${type}`} value="tim" 
-                onChange={this.onRadioChange1}
+                onChange={(e) => this.onRadioChange1(e)}
                 checked={this.state.selectedRadio1 === "tim"}/>
 
             <Form.Check inline label="Faith" className="Quiz-radio" type={type} id={`quiz2-${type}-2`} name={`quiz2-${type}`} value="faith" 
-                onChange={this.onRadioChange1}
+                onChange={(e) => this.onRadioChange1(e)}
                 checked={this.state.selectedRadio1 === "faith"}/>
           </div>
           ))}
@@ -177,11 +171,11 @@ class App extends React.Component {
           {['radio'].map(type => (
           <div key={`quiz3-${type}`} className="mb-3">
             <Form.Check inline label="Tim" className="Quiz-radio" type={type} id={`quiz3-${type}-1`} name={`quiz3-${type}`} value="tim"
-                onChange={this.onRadioChange2}
+                onChange={(e) => this.onRadioChange2(e)}
                 checked={this.state.selectedRadio2 === "tim"}/>
 
             <Form.Check inline label="Faith" className="Quiz-radio" type={type} id={`quiz3-${type}-2`} name={`quiz3-${type}`} value="faith"
-                onChange={this.onRadioChange2}
+                onChange={(e) => this.onRadioChange2(e)}
                 checked={this.state.selectedRadio2 === "faith"}/>
           </div>
           ))}
@@ -199,8 +193,8 @@ class App extends React.Component {
           {generatePuzzle(this.state.clues).map((item, index) => (
             (item.tag === 0) ? <br/>
             : (!item.first)
-              ? <input type="text" className={(this.state.message[index] === item.name) ? "reveal" : "default"} maxLength="1" placeholder={item.tag} onChange={(e, index) => this.onInputChange(e, index)} value={this.state.message[index]}/>
-              : <input type="text" className={(this.state.message[index] === item.name) ? "reveal" : "first"} maxLength="1" placeholder={item.tag} onChange={(e, index) => this.onInputChange(e, index)} value={this.state.message[index]} />
+              ? <input type="text" className={(this.state.message[index] === item.name) ? "reveal" : "default"} maxLength="1" placeholder={item.tag} onChange={(e) => this.onInputChange(index, e)} value={this.state.message[index]}/>
+              : <input type="text" className={(this.state.message[index] === item.name) ? "reveal" : "first"} maxLength="1" placeholder={item.tag} onChange={(e) => this.onInputChange(index, e)} value={this.state.message[index]} />
           ))}
         </div>
       </div>
