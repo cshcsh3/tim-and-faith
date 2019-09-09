@@ -67,7 +67,7 @@
 }
 
 .Puzzle-message input[type=text].first  {
-  border-color: #f77754;
+  border-color: #fcba03;
 }
 
 .Puzzle-message input[type=text].reveal  {

@@ -43,6 +43,12 @@ class App extends React.Component {
     this.setState({selectedRadio2: e.target.value})
   }
 
+  onEnter (e) {
+    if (e.key === 'Enter') {
+      this.onSubmit()
+    }
+  }
+
   onSubmit = () => {
     const stage = this.state.stage
     const field = this.state.field.toLowerCase()
@@ -136,7 +142,7 @@ class App extends React.Component {
         <h1 className="main">Question 1</h1>
         <p>Where do we both work?</p>
         <div className="Quiz-input">
-          <input type="text" maxLength="10" value={this.state.field} onChange={(e) => this.onFieldChange(e)} autoFocus/>
+          <input type="text" maxLength="10" value={this.state.field} onChange={(e) => this.onFieldChange(e)} onKeyPress={(e) => this.onEnter(e)} autoFocus/>
         </div>
         <Button onClick={this.onSubmit}>Submit</Button>
       </div>
@@ -159,7 +165,7 @@ class App extends React.Component {
           </div>
           ))}
         </Form>
-        <Button onClick={this.onSubmit}>Submit</Button>
+        <Button onClick={this.onSubmit} autoFocus>Submit</Button>
       </div>
     )
 
@@ -180,7 +186,7 @@ class App extends React.Component {
           </div>
           ))}
         </Form>
-        <Button onClick={this.onSubmit}>Submit</Button>
+        <Button onClick={this.onSubmit} autoFocus>Submit</Button>
       </div>
     )
 
