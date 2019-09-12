@@ -5,6 +5,89 @@ import Form from 'react-bootstrap/Form'
 import { generatePuzzle } from './GeneratePuzzle'
 import { message } from './Secret'
 
+
+const Welcome = (props) => (
+  <div className="Welcome">
+    <h1>Hi <span className="groom">Tim</span>! 🤖</h1>
+    <p>The objective of the game is to obtain the key to <span className="bride">Faith</span>'s room</p>
+    <p>Here are the instructions:</p>
+    <p>1. Answer 3 questions</p>
+    <p>2. The correct answers will unlock clues for the puzzle</p>
+    <p>3. Solve the puzzle, it'll tell you the key's location</p>
+    <p>Failure to solve the puzzle: You will face the <span className="bride">bride</span>'s penalty!</p>
+    <Button onClick={props.onReady}>I'm Ready</Button>
+  </div>
+)
+
+const Quiz1 = (props) => (
+  <div className="Quiz">
+    <h1 className="main">Question 1</h1>
+    <p>Where do we both work?</p>
+    <div className="Quiz-input">
+      <input type="text" maxLength="10" value={props.field} onChange={(e) => props.onFieldChange(e)} onKeyPress={(e) => props.onEnter(e)} autoFocus/>
+    </div>
+    <Button onClick={props.onSubmit}>Submit</Button>
+  </div>
+)
+
+const Quiz2 = (props) => (
+  <div className="Quiz">
+    <h1 className="main">Question 2</h1>
+    <p>Who confessed first?</p>
+    <Form>
+      {['radio'].map(type => (
+      <div key={`quiz2-${type}`} className="mb-3">
+        <Form.Check inline label="Tim" className="Quiz-radio" type={type} id={`quiz2-${type}-1`} name={`quiz2-${type}`} value="tim" 
+            onChange={(e) => props.onRadioChange1(e)}
+            checked={props.selectedRadio1 === "tim"}/>
+
+        <Form.Check inline label="Faith" className="Quiz-radio" type={type} id={`quiz2-${type}-2`} name={`quiz2-${type}`} value="faith" 
+            onChange={(e) => props.onRadioChange1(e)}
+            checked={props.selectedRadio1 === "faith"}/>
+      </div>
+      ))}
+    </Form>
+    <Button onClick={props.onSubmit} autoFocus>Submit</Button>
+  </div>
+)
+
+const Quiz3 = (props) => (
+  <div className="Quiz">
+    <h1 className="main">Question 3</h1>
+    <p>Who always give in during a fight?</p>
+    <Form>
+      {['radio'].map(type => (
+      <div key={`quiz3-${type}`} className="mb-3">
+        <Form.Check inline label="Tim" className="Quiz-radio" type={type} id={`quiz3-${type}-1`} name={`quiz3-${type}`} value="tim"
+            onChange={(e) => props.onRadioChange2(e)}
+            checked={props.selectedRadio2 === "tim"}/>
+
+        <Form.Check inline label="Faith" className="Quiz-radio" type={type} id={`quiz3-${type}-2`} name={`quiz3-${type}`} value="faith"
+            onChange={(e) => props.onRadioChange2(e)}
+            checked={props.selectedRadio2 === "faith"}/>
+      </div>
+      ))}
+    </Form>
+    <Button onClick={props.onSubmit} autoFocus>Submit</Button>
+  </div>
+)
+
+const Puzzle = (props) => (
+<div className="Puzzle">
+  <small className="sub">You got {(props.clues.length === 3) ? 'all' : (props.clues.length === 2) ? '2' : (props.clues.length === 1) ? '1' : 'none' } correct</small>
+  <h1>Now solve the puzzle</h1>
+  <small className="sub">If you are stuck, you can choose to do forfeits to unlock letters</small>
+  <div className="Puzzle-message">
+    {generatePuzzle(props.clues).map((item, index) => (
+      (item.tag === 0) ? <br/>
+      : (!item.first)
+        ? <input type="text" key={index} className={(props.message[index] === item.name) ? "reveal" : "default"} maxLength="1" placeholder={item.tag} onChange={(e) => props.onInputChange(index, e)} value={props.message[index]}/>
+        : <input type="text" key={index} className={(props.message[index] === item.name) ? "reveal" : "first"} maxLength="1" placeholder={item.tag} onChange={(e) => props.onInputChange(index, e)} value={props.message[index]} />
+    ))}
+  </div>
+</div>
+)
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -124,92 +207,10 @@ class App extends React.Component {
   render() {
     const stage = this.state.stage
 
-    const Welcome = () => (
-      <div className="Welcome">
-        <h1>Hi <span className="groom">Tim</span>! 🤖</h1>
-        <p>The objective of the game is to obtain the key to <span className="bride">Faith</span>'s room</p>
-        <p>Here are the instructions:</p>
-        <p>1. Answer 3 questions</p>
-        <p>2. The correct answers will unlock clues for the puzzle</p>
-        <p>3. Solve the puzzle, it'll tell you the key's location</p>
-        <p>Failure to solve the puzzle: You will face the <span className="bride">bride</span>'s penalty!</p>
-        <Button onClick={this.onReady}>I'm Ready</Button>
-      </div>
-    )
-
-    const Quiz1 = () => (
-      <div className="Quiz">
-        <h1 className="main">Question 1</h1>
-        <p>Where do we both work?</p>
-        <div className="Quiz-input">
-          <input type="text" maxLength="10" value={this.state.field} onChange={(e) => this.onFieldChange(e)} onKeyPress={(e) => this.onEnter(e)} autoFocus/>
-        </div>
-        <Button onClick={this.onSubmit}>Submit</Button>
-      </div>
-    )
-
-    const Quiz2 = () => (
-      <div className="Quiz">
-        <h1 className="main">Question 2</h1>
-        <p>Who confessed first?</p>
-        <Form>
-          {['radio'].map(type => (
-          <div key={`quiz2-${type}`} className="mb-3">
-            <Form.Check inline label="Tim" className="Quiz-radio" type={type} id={`quiz2-${type}-1`} name={`quiz2-${type}`} value="tim" 
-                onChange={(e) => this.onRadioChange1(e)}
-                checked={this.state.selectedRadio1 === "tim"}/>
-
-            <Form.Check inline label="Faith" className="Quiz-radio" type={type} id={`quiz2-${type}-2`} name={`quiz2-${type}`} value="faith" 
-                onChange={(e) => this.onRadioChange1(e)}
-                checked={this.state.selectedRadio1 === "faith"}/>
-          </div>
-          ))}
-        </Form>
-        <Button onClick={this.onSubmit} autoFocus>Submit</Button>
-      </div>
-    )
-
-    const Quiz3 = () => (
-      <div className="Quiz">
-        <h1 className="main">Question 3</h1>
-        <p>Who always give in during a fight?</p>
-        <Form>
-          {['radio'].map(type => (
-          <div key={`quiz3-${type}`} className="mb-3">
-            <Form.Check inline label="Tim" className="Quiz-radio" type={type} id={`quiz3-${type}-1`} name={`quiz3-${type}`} value="tim"
-                onChange={(e) => this.onRadioChange2(e)}
-                checked={this.state.selectedRadio2 === "tim"}/>
-
-            <Form.Check inline label="Faith" className="Quiz-radio" type={type} id={`quiz3-${type}-2`} name={`quiz3-${type}`} value="faith"
-                onChange={(e) => this.onRadioChange2(e)}
-                checked={this.state.selectedRadio2 === "faith"}/>
-          </div>
-          ))}
-        </Form>
-        <Button onClick={this.onSubmit} autoFocus>Submit</Button>
-      </div>
-    )
-
-    const Puzzle = () => (
-      <div className="Puzzle">
-        <small className="sub">You got {(this.state.clues.length === 3) ? 'all' : (this.state.clues.length === 2) ? '2' : (this.state.clues.length === 1) ? '1' : 'none' } correct</small>
-        <h1>Now solve the puzzle</h1>
-        <small className="sub">If you are stuck, you can choose to do forfeits to unlock letters</small>
-        <div className="Puzzle-message">
-          {generatePuzzle(this.state.clues).map((item, index) => (
-            (item.tag === 0) ? <br/>
-            : (!item.first)
-              ? <input type="text" className={(this.state.message[index] === item.name) ? "reveal" : "default"} maxLength="1" placeholder={item.tag} onChange={(e) => this.onInputChange(index, e)} value={this.state.message[index]}/>
-              : <input type="text" className={(this.state.message[index] === item.name) ? "reveal" : "first"} maxLength="1" placeholder={item.tag} onChange={(e) => this.onInputChange(index, e)} value={this.state.message[index]} />
-          ))}
-        </div>
-      </div>
-    )
-
     if (stage === 1) {
       return(
         <div className="App">
-          <Quiz1 />
+          <Quiz1 field={this.state.field} onFieldChange={this.onFieldChange.bind(this)} onEnter={this.onEnter.bind(this)} onSubmit={this.onSubmit}/>
         </div>
       )
     }
@@ -217,7 +218,7 @@ class App extends React.Component {
     if (stage === 2) {
       return(
         <div className="App">
-          <Quiz2 />
+          <Quiz2 onRadioChange1={this.onRadioChange1.bind(this)} selectedRadio1={this.state.selectedRadio1} onSubmit={this.onSubmit}/>
         </div>
       )
     }
@@ -225,7 +226,7 @@ class App extends React.Component {
     if (stage === 3) {
       return(
         <div className="App">
-          <Quiz3 />
+          <Quiz3 onRadioChange2={this.onRadioChange2.bind(this)} selectedRadio2={this.state.selectedRadio2} onSubmit={this.onSubmit} />
         </div>
       )
     }
@@ -233,7 +234,7 @@ class App extends React.Component {
     if (stage === 4) {
       return(
         <div className="App">
-          <Puzzle />
+          <Puzzle clues={this.state.clues} onInputChange={this.onInputChange.bind(this)} message={this.state.message}  />
         </div>
       )
     }
@@ -241,7 +242,7 @@ class App extends React.Component {
     // default, stage 0
     return(
       <div className="App">
-        <Welcome />
+        <Welcome onReady={this.onReady} />
       </div>
     )
   }
