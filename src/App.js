@@ -2,8 +2,8 @@ import React from 'react'
 import './App.css'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import { generatePuzzle } from './GeneratePuzzle'
-import { message } from './Secret'
+import { generatePuzzle, messageSize } from './GeneratePuzzle'
+import { codeA, codeB, codeK, codeI, codeE } from './Secret'
 
 
 const Welcome = (props) => (
@@ -74,9 +74,13 @@ const Quiz3 = (props) => (
 
 const Puzzle = (props) => (
 <div className="Puzzle">
-  <small className="sub">You got {(props.clues.length === 3) ? 'all' : (props.clues.length === 2) ? '2' : (props.clues.length === 1) ? '1' : 'none' } correct</small>
+  <small className="sub">You got {(props.clues.filter(item => { return item < 4 }).length === 3) ? 'all' : (props.clues.filter(item => { return item < 4 }).length === 2) ? '2' : (props.clues.filter(item => { return item < 4 }).length === 1) ? '1' : 'none' } correct</small>
   <h1>Now solve the puzzle</h1>
+  <h3>You have <span className="main">{props.minutes}:{props.seconds}</span></h3>
   <small className="sub">If you are stuck, you can choose to do forfeits to unlock letters</small>
+  <div>
+    <input type="text" className="forfeit" maxLength="6" placeholder="Enter forfeit code" onChange={(e) => props.onCodeChange(e)} value={props.code}/>
+  </div>
   <div className="Puzzle-message">
     {generatePuzzle(props.clues).map((item, index) => (
       (item.tag === 0) ? <br/>
@@ -88,17 +92,24 @@ const Puzzle = (props) => (
 </div>
 )
 
+const End = () => (
+  <div className="End">
+    <div className="big">👻</div>
+    <h1 className="main">Game Over!</h1>
+  </div>
+) 
+
 class App extends React.Component {
   constructor(props) {
     super(props)
 
-    const size = message.replace(/\s/g, "").length
     /*
     stage 0 - welcome and instructions
     stage 1 - quiz 1: input text field
     stage 2 - quiz 2: option tim or faith
     stage 3 - quiz 3: option tim or faith
     stage 4 - puzzle time
+    stage 5 - end screen
     */
     this.state = {
       stage: 0,
@@ -106,8 +117,15 @@ class App extends React.Component {
       selectedRadio1: "tim",
       selectedRadio2: "tim",
       clues: [],
-      message: new Array(size)
+      message: new Array(messageSize),
+      code: "",
+      minutes: '15',
+      seconds: '00'
     }
+    this.secondsRemaining = null
+    this.intervalHandle = null
+    this.startCountdown = this.startCountdown.bind(this)
+    this.tick = this.tick.bind(this)
   }
 
   onReady = () => {
@@ -129,6 +147,60 @@ class App extends React.Component {
   onEnter (e) {
     if (e.key === 'Enter') {
       this.onSubmit()
+    }
+  }
+
+  onInputChange(index, e) {
+    const current = [...this.state.message]
+    current[index] = e.target.value.toLowerCase()
+
+    this.setState({
+      message: current
+    })
+  }
+
+  onCodeChange (e) {
+    const code = e.target.value
+    this.setState({code})
+    if (code === codeA) {
+      this.setState({
+        clues: [...this.state.clues, '4'],
+        code: ''
+      }, () => {
+        this.loadPuzzle()
+      })
+    }
+    if (code === codeB) {
+      this.setState({
+        clues: [...this.state.clues, '5'],
+        code: ''
+      }, () => {
+        this.loadPuzzle()
+      })
+    }
+    if (code === codeK) {
+      this.setState({
+        clues: [...this.state.clues, '6'],
+        code: ''
+      }, () => {
+        this.loadPuzzle()
+      })
+    }
+    if (code === codeI) {
+      this.setState({
+        clues: [...this.state.clues, '7'],
+        code: ''
+      }, () => {
+        this.loadPuzzle()
+      })
+    }
+    if (code === codeE) {
+      this.setState({
+        clues: [...this.state.clues, '8'],
+        code: ''
+      }, () => {
+        this.loadPuzzle()
+      })
     }
   }
 
@@ -173,14 +245,16 @@ class App extends React.Component {
         this.setState({
           clues: [...this.state.clues, '3']
         }, () => {
+          this.startCountdown()
           this.loadPuzzle()
           return
         })
       }
+      this.startCountdown()
       this.loadPuzzle()
     }
   }
-
+  
   loadPuzzle() {
     const current = [...this.state.message]
     generatePuzzle(this.state.clues).map((item, index) => {
@@ -191,19 +265,46 @@ class App extends React.Component {
     this.setState({
       message: current
     }, () => {
-      this.setState({stage: 4})
+      this.setState({
+        stage: 4
+      })
     })
   }
 
-  onInputChange(index, e) {
-    const current = [...this.state.message]
-    current[index] = e.target.value
-
+  tick() {
+    var min = Math.floor(this.secondsRemaining / 60);
+    var sec = this.secondsRemaining - (min * 60);
     this.setState({
-      message: current
+      minutes: min,
+      seconds: sec
     })
+    
+    if (sec < 10) {
+      this.setState({
+        seconds: '0' + this.state.seconds,
+      })
+    }
+    
+    if (min < 10) {
+    this.setState({
+      minutes: '0' + min,
+     })
+    }
+    
+    if (min === 0 && sec === 0) {
+      clearInterval(this.intervalHandle);
+      this.setState({stage: 5})
+    }
+
+    this.secondsRemaining--
   }
 
+  startCountdown() {
+    this.intervalHandle = setInterval(this.tick, 1000);
+    let time = this.state.minutes;
+    this.secondsRemaining = time * 60;
+  }
+  
   render() {
     const stage = this.state.stage
 
@@ -234,7 +335,15 @@ class App extends React.Component {
     if (stage === 4) {
       return(
         <div className="App">
-          <Puzzle clues={this.state.clues} onInputChange={this.onInputChange.bind(this)} message={this.state.message}  />
+          <Puzzle onInputChange={this.onInputChange.bind(this)} message={this.state.message} onCodeChange={this.onCodeChange.bind(this)} code={this.state.code} clues={this.state.clues} minutes={this.state.minutes} seconds={this.state.seconds}/>
+        </div>
+      )
+    }
+    
+    if (stage === 5) {
+      return(
+        <div className="App">
+          <End />
         </div>
       )
     }

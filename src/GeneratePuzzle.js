@@ -40,6 +40,8 @@ class Letter {
     }
 }
 
+export const messageSize = message.replace(/\s/g, "").length
+
 /*
 A simple letter tracing puzzle.
 All letters in the message are tagged with a number.
@@ -49,6 +51,7 @@ The tag for the subsequent letter occurrences follow the previous letter positio
 
 export const generatePuzzle = (clues) => {
     let allow = []
+    let showAll = []
 
     if (clues.includes('1')) {
         allow.push('s')
@@ -66,6 +69,26 @@ export const generatePuzzle = (clues) => {
         allow.push('h')
     }
 
+    if (clues.includes('4')) {
+        showAll.push('a')
+    }
+
+    if (clues.includes('5')) {
+        showAll.push('b')
+    }
+
+    if (clues.includes('6')) {
+        showAll.push('k')
+    }
+
+    if (clues.includes('7')) {
+        showAll.push('i')
+    }
+
+    if(clues.includes('8')) {
+        showAll.push('e')
+    }
+
     let hist = {}
     let puzzle = []
 
@@ -80,7 +103,7 @@ export const generatePuzzle = (clues) => {
 
         if (!hist[character]) {
             // char appearing for first time
-            if (allow.includes(character)) {
+            if (allow.includes(character) || showAll.includes(character)) {
                 const letter = new Letter(alphabetLibrary[character], character, true, true)
                 puzzle.push(letter)
             } else {
@@ -90,8 +113,13 @@ export const generatePuzzle = (clues) => {
         } else {
             // char appearing subsequent times
             // tag should be index of previous character
-            const letter = new Letter(hist[character], character, false, false)
-            puzzle.push(letter)
+            if (showAll.includes(character)) {
+                const letter = new Letter(hist[character], character, false, true)
+                puzzle.push(letter)
+            } else {
+                const letter = new Letter(hist[character], character, false, false)
+                puzzle.push(letter)
+            }
         }
 
         // update history stack

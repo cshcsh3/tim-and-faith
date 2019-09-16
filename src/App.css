@@ -14,6 +14,10 @@
   color: #49beb7;
 }
 
+.big {
+  font-size: 70px;
+}
+
 .App {
   background-color: #282c34;
   min-height: 100vh;
@@ -49,6 +53,17 @@
   margin: 1rem;
 }
 
+.Puzzle input[type=text].forfeit {
+  border-color: white;
+  font-size: 18px;
+  width: 200px;
+  height: 40px;
+  border-width: 0 0 2px 0;
+  padding: 0.3rem;
+  text-align: center;
+  margin-top: 20px;
+}
+
 .Puzzle-message {
   margin-top: 1rem;
 }
@@ -77,3 +92,4 @@
 .Puzzle-message input[type=text].default {
   border-color: white;
 }
+
