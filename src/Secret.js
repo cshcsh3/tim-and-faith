@@ -1,6 +1,0 @@
-export const message = "it was only eleven months ago that the king was born find the king and you shall find the key"
-export const codeA = "m2pf8e"
-export const codeB = "aqw12e"
-export const codeK = "va7hub"
-export const codeI = "f8ymat"
-export const codeE = "z4slnj"

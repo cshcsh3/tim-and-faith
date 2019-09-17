@@ -1,6 +1,5 @@
-import { message } from './Secret'
+import { message } from './secret.json'
 
-// simple alphabet mapping
 const alphabetLibrary = {
     ' ': 0,
     'a': 1,
@@ -41,13 +40,6 @@ class Letter {
 }
 
 export const messageSize = message.replace(/\s/g, "").length
-
-/*
-A simple letter tracing puzzle.
-All letters in the message are tagged with a number.
-The tag for the first letter occurrences follows the alphabetical numbering (see alphabetLibrary).
-The tag for the subsequent letter occurrences follow the previous letter positioning.
-*/
 
 export const generatePuzzle = (clues) => {
     let allow = []
@@ -94,7 +86,6 @@ export const generatePuzzle = (clues) => {
 
     let index = 1
     for (const character of message) {
-        // spaces are not considered letters, tag position count will not count spaces
         if (character === ' ') {
             const letter = new Letter(alphabetLibrary[character], character, false, false) 
             puzzle.push(letter)
@@ -102,7 +93,6 @@ export const generatePuzzle = (clues) => {
         }
 
         if (!hist[character]) {
-            // char appearing for first time
             if (allow.includes(character) || showAll.includes(character)) {
                 const letter = new Letter(alphabetLibrary[character], character, true, true)
                 puzzle.push(letter)
@@ -111,8 +101,6 @@ export const generatePuzzle = (clues) => {
                 puzzle.push(letter)
             }
         } else {
-            // char appearing subsequent times
-            // tag should be index of previous character
             if (showAll.includes(character)) {
                 const letter = new Letter(hist[character], character, false, true)
                 puzzle.push(letter)
@@ -122,7 +110,6 @@ export const generatePuzzle = (clues) => {
             }
         }
 
-        // update history stack
         hist[character] = index
         index++
     }

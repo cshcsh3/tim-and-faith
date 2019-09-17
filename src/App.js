@@ -3,7 +3,7 @@ import './App.css'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import { generatePuzzle, messageSize } from './GeneratePuzzle'
-import { codeA, codeB, codeK, codeI, codeE } from './Secret'
+import { codeA, codeB, codeK, codeI, codeE } from './secret.json'
 
 
 const Welcome = (props) => (
