@@ -171,7 +171,7 @@ class App extends React.Component {
   }
 
   onCodeChange (e) {
-    const code = e.target.value
+    const code = e.target.value.toLowerCase()
     this.setState({code})
     if (code === codeA) {
       this.setState({
