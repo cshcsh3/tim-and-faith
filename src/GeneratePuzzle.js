@@ -39,7 +39,15 @@ class Letter {
     }
 }
 
-export const messageSize = message.replace(/\s/g, "").length
+const allCluesMapper = {
+    '4': 'a',
+    '5': 'n',
+    '6': 'k',
+    '7': 'i',
+    '8': 'e'
+}
+
+export const stripped = message.replace(/\s/g, "")
 
 export const generatePuzzle = (clues) => {
     let allow = []
@@ -61,24 +69,11 @@ export const generatePuzzle = (clues) => {
         allow.push('h')
     }
 
-    if (clues.includes('4')) {
-        showAll.push('a')
-    }
-
-    if (clues.includes('5')) {
-        showAll.push('b')
-    }
-
-    if (clues.includes('6')) {
-        showAll.push('k')
-    }
-
-    if (clues.includes('7')) {
-        showAll.push('i')
-    }
-
-    if(clues.includes('8')) {
-        showAll.push('e')
+    const keys = Object.keys(allCluesMapper)
+    for (const k of keys) {
+        if (clues.includes(k)) {
+            showAll.push(allCluesMapper[k])
+        }
     }
 
     let hist = {}

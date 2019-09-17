@@ -2,9 +2,8 @@ import React from 'react'
 import './App.css'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import { generatePuzzle, messageSize } from './GeneratePuzzle'
-import { codeA, codeB, codeK, codeI, codeE } from './secret.json'
-
+import { generatePuzzle, stripped } from './GeneratePuzzle'
+import { codeA, codeN, codeK, codeI, codeE } from './secret.json'
 
 const Welcome = (props) => (
   <div className="Welcome">
@@ -99,6 +98,13 @@ const End = () => (
   </div>
 ) 
 
+const Win = () => (
+  <div className="End">
+    <div className="big">🥳</div>
+    <h1 className="groom">Whoop-Dee-Doo!</h1>
+  </div>
+) 
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -117,7 +123,7 @@ class App extends React.Component {
       selectedRadio1: "tim",
       selectedRadio2: "tim",
       clues: [],
-      message: new Array(messageSize),
+      message: new Array(stripped.length),
       code: "",
       minutes: '15',
       seconds: '00'
@@ -156,6 +162,11 @@ class App extends React.Component {
 
     this.setState({
       message: current
+    }, () => {
+      const temp = this.state.message.join("")
+      if (temp === stripped) {
+        this.setState({stage: 6})
+      }
     })
   }
 
@@ -170,7 +181,7 @@ class App extends React.Component {
         this.loadPuzzle()
       })
     }
-    if (code === codeB) {
+    if (code === codeN) {
       this.setState({
         clues: [...this.state.clues, '5'],
         code: ''
@@ -344,6 +355,14 @@ class App extends React.Component {
       return(
         <div className="App">
           <End />
+        </div>
+      )
+    }
+
+    if (stage === 6) {
+      return(
+        <div className="App">
+          <Win />
         </div>
       )
     }
