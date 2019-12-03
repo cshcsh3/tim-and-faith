@@ -260,9 +260,10 @@ class App extends React.Component {
           this.loadPuzzle()
           return
         })
+      } else {
+        this.startCountdown()
+        this.loadPuzzle()
       }
-      this.startCountdown()
-      this.loadPuzzle()
     }
   }
   
